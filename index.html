@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perpustakaan Digital 711 — Buku Pemrograman</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#14161d;color:#e8eaf0;min-height:100vh}
+/* ===== HEADER ===== */
+.hd{max-width:1200px;margin:0 auto;padding:34px 24px 6px;text-align:center}
+.hd h1{font-size:30px}
+.hd p{color:#9aa3b5;margin-top:6px;font-size:14px}
+.stats{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.stats span{background:#1e2230;border:1px solid #2c3242;border-radius:20px;padding:6px 14px;font-size:12.5px;color:#c3cade}
+/* ===== RAK BUKU ===== */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:30px;max-width:1200px;margin:0 auto;padding:28px 24px 50px}
+.card{cursor:pointer;transition:transform .25s}
+.card:hover{transform:translateY(-8px)}
+.card:hover .cover{box-shadow:0 18px 40px rgba(0,0,0,.55)}
+.cover{position:relative;width:100%;aspect-ratio:3/4.15;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.4);transition:box-shadow .25s}
+.cover svg.art{position:absolute;left:0;right:0;bottom:0;width:100%}
+.tri{position:absolute;top:3.5%;right:5%;color:#e23c3c;font-size:15px;z-index:3}
+.cimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:#fff;font-weight:800;font-size:20px;line-height:1.3}
+.del{position:absolute;top:8px;left:8px;z-index:5;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.65);color:#ff7b7b;font-weight:bold;cursor:pointer;display:none}
+.card:hover .del{display:block}
+.del:hover{background:#e23c3c;color:#fff}
+.cmeta{margin-top:12px}
+.cmeta .t{font-size:13.5px;color:#eef1f8;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cmeta .p{font-size:12px;color:#8f98ac;margin-top:4px}
+.cmeta .p b{color:#e23c3c}
+.badge{display:inline-block;margin-top:7px;background:#1e4fd8;color:#fff;font-size:10.5px;padding:3px 9px;border-radius:10px;margin-right:5px}
+.resume{display:none;margin-top:7px;background:#1dd3a0;color:#04352b;font-size:10.5px;font-weight:bold;padding:3px 9px;border-radius:10px}
+.resume.on{display:inline-block}
+/* ---- Sampul 1 : Web untuk Pemula ---- */
+.c1{background:linear-gradient(165deg,#0c1f52 0%,#12296b 55%,#1a3a8f 100%)}
+.c1 .a1{position:absolute;top:8%;left:8%;color:#fff;font-size:18px}
+.c1 .a2{position:absolute;top:12.5%;left:8%;color:#fff;font-size:25px;font-weight:800;line-height:1.15}
+.c1 .a2 b{font-size:38px;font-weight:900;display:block}
+.c1 .a2 span{font-size:14px;font-weight:600}
+.c1 ul{position:absolute;top:47%;left:8%;right:10%;list-style:none}
+.c1 li{color:#c9d6f5;font-size:8.6px;margin-top:4px}
+.c1 .au{position:absolute;bottom:4.5%;left:8%;color:#fff;font-weight:bold;font-size:11px;letter-spacing:1.5px;z-index:2}
+/* ---- Sampul 2 : Buku Sakti C++ ---- */
+.c2{background:linear-gradient(160deg,#3b2fa8 0%,#4a55d4 60%,#5a6fe0 100%);text-align:center}
+.c2 .a1{position:absolute;top:9%;left:0;right:0;color:#fff;font-size:12px;letter-spacing:5px}
+.c2 .a2{position:absolute;top:14%;left:0;right:0;color:#fff;font-size:22px;font-weight:800;letter-spacing:1px}
+.c2 .a3{position:absolute;top:21%;left:0;right:0;color:#ffe600;font-size:74px;font-weight:900;line-height:1;text-shadow:0 5px 14px rgba(0,0,0,.35)}
+.c2 .a4{position:absolute;top:47%;left:0;right:0;color:#fff;font-size:13px;font-weight:bold;letter-spacing:2.5px}
+.c2 .bdg{position:absolute;top:56%;left:7%;width:64px;height:64px;background:#ffd23f;color:#5b3a00;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10.5px;line-height:1.15;transform:rotate(-12deg);z-index:2;box-shadow:0 4px 10px rgba(0,0,0,.3)}
+.c2 .au{position:absolute;bottom:4%;left:0;right:0;color:#fff;font-weight:bold;font-size:11px;letter-spacing:2px;z-index:2}
+/* ---- Sampul 3 : Buku Sakti Web ---- */
+.c3{background:linear-gradient(155deg,#b0156f 0%,#8e1a8a 55%,#5b1fa8 100%);text-align:center}
+.c3 .a1{position:absolute;top:7%;left:0;right:0;color:#fff;font-size:19px;font-weight:800;line-height:1.25}
+.c3 .a2{position:absolute;top:19%;left:0;right:0;color:#ffe600;font-size:64px;font-weight:900;line-height:1;text-shadow:0 5px 14px rgba(0,0,0,.3)}
+.c3 .a3{position:absolute;top:40%;left:0;right:0;color:#fff;font-size:11px;font-weight:bold;line-height:1.4}
+.c3 .bdg{position:absolute;top:38%;right:5%;background:#ffd23f;color:#7a1f00;font-weight:900;font-size:10px;padding:7px 9px;border-radius:9px;transform:rotate(8deg);line-height:1.2;z-index:2}
+.c3 .au{position:absolute;bottom:3.5%;left:0;right:0;color:#fff;font-weight:bold;font-size:13px;z-index:2}
+/* ---- Sampul 4 : C++ dari Nol ---- */
+.c4{background:linear-gradient(150deg,#2a1a72 0%,#4a2a9d 45%,#7b3fd0 100%)}
+.c4 .a1{position:absolute;top:6%;left:8%;color:#fff;font-size:28px;font-weight:800}
+.c4 .a2{position:absolute;top:15%;left:8%;color:#b9c8ff;font-size:23px;font-weight:800}
+.c4 .a3{position:absolute;top:23%;left:8%;color:#fff;font-size:27px;font-weight:900}
+.c4 .pil{position:absolute;top:34%;left:8%;background:#1dd3a0;color:#04352b;font-weight:bold;font-size:9.5px;padding:5px 12px;border-radius:16px}
+.c4 .chk{position:absolute;top:44%;left:8%;right:26%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:9px 10px}
+.c4 .chk div{color:#e9e4ff;font-size:8.4px;margin-top:4px}
+.c4 .chk div:first-child{margin-top:0}
+.c4 .au{position:absolute;bottom:38%;left:8%;z-index:2}
+.c4 .au b{color:#ffd23f;font-size:16px;display:block}
+.c4 .au span{color:#ffb84d;font-size:12px}
+/* ===== KARTU TAMBAH BUKU ===== */
+.more{border:2px dashed #3a4157;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:3/4.15;color:#8f98ac;text-align:center;padding:20px;gap:10px;cursor:pointer;transition:.25s}
+.more:hover{border-color:#1dd3a0;color:#c3cade;background:#181c28}
+.more .plus{font-size:44px;color:#1dd3a0}
+.more b{color:#c3cade;font-size:14px}
+/* ===== MODAL TAMBAH BUKU ===== */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:80;padding:18px}
+.overlay.show{display:flex}
+.addbox{background:#171a23;border:1px solid #2c3242;border-radius:14px;max-width:660px;width:100%;max-height:88vh;overflow:auto;padding:22px;position:relative}
+.addbox h3{font-size:18px;margin-bottom:14px}
+.addbox .x{position:absolute;top:12px;right:14px;background:#232838;border:1px solid #333a50;color:#dfe4f2;width:30px;height:30px;border-radius:50%;cursor:pointer;font-weight:bold}
+.tabs2{display:flex;gap:8px;margin-bottom:14px}
+.tabs2 button{flex:1;background:#1e2230;border:1px solid #2c3242;color:#9aa3b5;padding:10px;border-radius:9px;cursor:pointer;font-size:13.5px;font-weight:bold}
+.tabs2 button.on{background:#1e4fd8;border-color:#1e4fd8;color:#fff}
+.srow{display:flex;gap:8px}
+.srow input{flex:1;background:#0e1017;border:1px solid #333a50;color:#fff;border-radius:9px;padding:11px 14px;font-size:14px;outline:none}
+.srow button{background:#1dd3a0;color:#04352b;border:none;border-radius:9px;padding:0 20px;font-weight:bold;cursor:pointer;font-size:14px}
+.hint{font-size:12.5px;color:#8f98ac;margin:10px 2px;line-height:1.5}
+#results{max-height:44vh;overflow:auto;display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.ritem{display:flex;align-items:center;gap:12px;background:#1e2230;border:1px solid #2c3242;border-radius:10px;padding:10px}
+.ritem img{width:52px;height:72px;object-fit:cover;border-radius:5px;flex-shrink:0;background:#0e1017}
+.rph{width:52px;height:72px;border-radius:5px;flex-shrink:0;background:linear-gradient(160deg,#1e4fd8,#7b3fd0);display:flex;align-items:center;justify-content:center;font-size:22px}
+.rinf{flex:1;min-width:0}
+.rinf b{font-size:13.5px;color:#eef1f8;display:block;line-height:1.3}
+.rinf span{font-size:11.5px;color:#8f98ac;display:block;margin-top:2px}
+.rinf .pgs{color:#1dd3a0;font-weight:bold}
+.ritem button{background:#1e4fd8;color:#fff;border:none;border-radius:8px;padding:9px 13px;cursor:pointer;font-weight:bold;font-size:12.5px;flex-shrink:0}
+.ritem button:hover{background:#2f63f0}
+.drop{display:block;border:2px dashed #3a4157;border-radius:10px;padding:22px;text-align:center;color:#8f98ac;cursor:pointer;font-size:14px;line-height:1.6}
+.drop:hover{border-color:#1dd3a0}
+.prev{display:none;width:110px;border-radius:8px;margin:12px auto;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.frow{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.frow input{background:#0e1017;border:1px solid #333a50;color:#fff;border-radius:9px;padding:11px 14px;font-size:14px;outline:none;width:100%}
+.addbig{margin-top:14px;width:100%;background:#1dd3a0;color:#04352b;border:none;border-radius:9px;padding:13px;font-weight:900;font-size:15px;cursor:pointer}
+.addbig:hover{filter:brightness(1.1)}
+/* ===== TOAST ===== */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(90px);background:#1dd3a0;color:#04352b;font-weight:bold;padding:12px 22px;border-radius:24px;transition:.3s;z-index:99;opacity:0;max-width:90vw;font-size:13.5px}
+#toast.show{transform:translateX(-50%);opacity:1}
+/* ===== READER ===== */
+#reader{position:fixed;inset:0;background:#0e0f14;display:none;flex-direction:column;z-index:50}
+#reader.show{display:flex}
+.rtop{display:flex;align-items:center;gap:14px;padding:10px 16px;background:#171a23;border-bottom:1px solid #262b3a;flex-wrap:wrap}
+.rtop button{background:#232838;color:#dfe4f2;border:1px solid #333a50;border-radius:8px;padding:7px 12px;cursor:pointer;font-size:13px}
+.rtop button:hover{background:#2c3348}
+.rtt{flex:1;min-width:200px}
+.rtt .t1{font-size:14px;font-weight:bold;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rtt .t2{font-size:11.5px;color:#8f98ac;margin-top:2px}
+.rpct{font-size:12px;color:#1dd3a0;font-weight:bold}
+.barw{height:3px;background:#232838}
+#bar{height:100%;width:0;background:linear-gradient(90deg,#1a73e8,#1dd3a0);transition:width .3s}
+.rwrap{flex:1;display:flex;overflow:hidden}
+.rside{width:270px;flex-shrink:0;overflow-y:auto;background:#13161f;border-right:1px solid #232838;padding:14px}
+.rside h4{font-size:11px;color:#77809a;letter-spacing:1.5px;margin:6px 0 10px}
+.toc-i{display:flex;justify-content:space-between;gap:8px;font-size:12.8px;color:#c3cade;padding:8px 10px;border-radius:8px;cursor:pointer}
+.toc-i:hover{background:#1c2130}
+.toc-i.on{background:#1e3a6e;color:#fff}
+.toc-i .pg{color:#77809a;flex-shrink:0}
+.rmain{flex:1;overflow-y:auto;display:flex;justify-content:center;padding:28px 18px 60px}
+.paper{background:#fdfdf7;color:#22222a;max-width:740px;width:100%;border-radius:6px;padding:58px 62px 70px;font-family:Georgia,'Times New Roman',serif;line-height:1.8;box-shadow:0 10px 40px rgba(0,0,0,.6);font-size:16px}
+.paper h1{font-size:27px;margin:14px 0 18px;line-height:1.3}
+.paper h2{font-size:19px;margin:6px 0 14px;color:var(--ac,#1a4fc4)}
+.bab{color:var(--ac,#1a4fc4);letter-spacing:5px;font-size:13px;font-weight:bold;margin-top:20px}
+.runhead{font-size:10.5px;color:#98917e;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #e4e0d2;padding-bottom:6px;margin-bottom:14px}
+.paper p{margin-bottom:15px;text-align:justify}
+.poin{background:#f2f6ec;border-left:4px solid #7aa851;border-radius:6px;padding:13px 16px;margin:18px 0}
+.poin-t{font-weight:bold;font-size:14px;margin-bottom:8px;font-family:'Segoe UI',sans-serif}
+.poin ul{padding-left:20px}
+.poin li{margin-bottom:5px;font-size:.92em}
+.tip{background:#fff7e0;border-left:4px solid #e8b93c;border-radius:6px;padding:11px 15px;margin:16px 0;font-size:.92em}
+.lat{background:#eef3ff;border-left:4px solid #3a6fd8;border-radius:6px;padding:11px 15px;margin:16px 0;font-size:.92em}
+.code-t{font-family:'Segoe UI',sans-serif;font-size:12.5px;font-weight:bold;color:#555;margin:14px 0 6px}
+.code{font-family:Consolas,'Courier New',monospace;background:#20263a;color:#d6e2ff;padding:15px 17px;border-radius:9px;font-size:.78em;overflow-x:auto;white-space:pre;line-height:1.55;margin:0 0 16px}
+.folio{text-align:center;color:#98917e;font-size:12.5px;margin-top:34px}
+.tp{text-align:center;padding-top:70px}
+.tp .ln{width:110px;height:2px;background:var(--ac,#1a4fc4);margin:22px auto}
+.tp .au2{font-size:18px;margin-bottom:4px}
+.tp .pb{font-size:14px;color:#666;margin-top:26px}
+.tp .ed{font-size:12px;color:#999;margin-top:5px}
+.toc-row{display:flex;align-items:baseline;gap:8px;margin-bottom:11px;font-size:14.5px;cursor:pointer}
+.toc-row:hover{color:var(--ac,#1a4fc4)}
+.toc-row .dots{flex:1;border-bottom:2px dotted #c9c4b2;transform:translateY(-4px)}
+.rbot{display:flex;align-items:center;gap:10px;padding:10px 16px;background:#171a23;border-top:1px solid #262b3a;flex-wrap:wrap}
+.rbot button{background:#232838;color:#dfe4f2;border:1px solid #333a50;border-radius:8px;padding:8px 13px;cursor:pointer;font-size:13px}
+.rbot button:hover{background:#2c3348}
+.rbot input[type=number]{width:72px;background:#0e1017;color:#fff;border:1px solid #333a50;border-radius:8px;padding:8px;text-align:center;font-size:13px}
+#slider{flex:1;min-width:140px;accent-color:#1a73e8}
+.totpg{font-size:12.5px;color:#8f98ac}
+@media(max-width:820px){.rside{position:absolute;left:0;top:0;bottom:0;z-index:5;transform:translateX(-100%);transition:.25s}.rside.open{transform:none}.paper{padding:36px 24px 60px}}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <h1>📚 Perpustakaan Digital 711</h1>
+  <p>Koleksi Buku Pemrograman — Anak Hebat Indonesia &nbsp;•&nbsp; klik sampul untuk mulai membaca</p>
+  <div class="stats"><span id="stB">📕 4 Buku</span><span id="stP">📄 1.600 Halaman</span><span id="stC">📑 45 Bab</span><span>💾 Progress &amp; koleksi tersimpan otomatis</span></div>
+</div>
+
+<div class="grid" id="grid">
+
+  <!-- ============ BUKU 1 : WEB UNTUK PEMULA ============ -->
+  <div class="card" onclick="openBook(0)">
+    <div class="cover c1">
+      <div class="tri">▲</div>
+      <div class="a1">Belajar</div>
+      <div class="a2">Pemrograman<b>Web</b><span>untuk Pemula</span></div>
+      <ul><li>▸ Pengenalan Sepenuh Web Development</li><li>▸ Dasar-Dasar Pemrograman Dokumen HTML</li><li>▸ Mendalami CSS (Dasar-Dasar JavaScript)</li><li>▸ Konsep Pemrograman OOP</li><li>▸ Workshop Membangun Web Statis</li></ul>
+      <svg class="art" viewBox="0 0 300 190" preserveAspectRatio="xMidYMax meet">
+        <g stroke="#3a5bbf" stroke-width="1" opacity=".35"><line x1="18" y1="26" x2="88" y2="62"/><line x1="88" y1="62" x2="168" y2="34"/><line x1="168" y1="34" x2="262" y2="72"/><line x1="88" y1="62" x2="205" y2="100"/></g>
+        <g fill="#5f7fe8" opacity=".7"><circle cx="18" cy="26" r="3"/><circle cx="88" cy="62" r="3"/><circle cx="168" cy="34" r="3"/><circle cx="262" cy="72" r="3"/><circle cx="205" cy="100" r="3"/></g>
+        <polygon points="112,88 58,42 38,62" fill="#7fa7ff" opacity=".18"/><polygon points="112,88 152,30 172,46" fill="#7fa7ff" opacity=".15"/>
+        <rect x="12" y="118" width="62" height="72" fill="#0e1a40" stroke="#2c4a9e"/><rect x="84" y="96" width="72" height="94" fill="#12214e" stroke="#2c4a9e"/><rect x="228" y="128" width="62" height="62" fill="#0e1a40" stroke="#2c4a9e"/>
+        <g fill="#ffd76b" opacity=".9"><rect x="20" y="126" width="6" height="6"/><rect x="34" y="126" width="6" height="6"/><rect x="20" y="140" width="6" height="6"/><rect x="48" y="140" width="6" height="6"/><rect x="92" y="104" width="6" height="6"/><rect x="106" y="104" width="6" height="6"/><rect x="134" y="118" width="6" height="6"/><rect x="92" y="132" width="6" height="6"/><rect x="236" y="136" width="6" height="6"/><rect x="264" y="136" width="6" height="6"/><rect x="250" y="150" width="6" height="6"/></g>
+        <g transform="translate(86,52)"><rect x="0" y="0" width="54" height="37" rx="3" fill="#0a1330" stroke="#c9d6f2" stroke-width="2"/><rect x="5" y="5" width="44" height="27" fill="#0e1c46"/><rect x="9" y="9" width="22" height="3" fill="#63e0b0"/><rect x="9" y="15" width="32" height="3" fill="#63a8ff"/><rect x="9" y="21" width="26" height="3" fill="#ffd76b"/><rect x="-6" y="37" width="66" height="5" rx="2" fill="#c9d6f2"/></g>
+      </svg>
+      <div class="au">KRISTIANTO HARYODI</div>
+    </div>
+    <div class="cmeta"><div class="t">Belajar Pemrograman Web untuk Pemula</div><div class="p"><b>▲</b> Anak Hebat Indonesia • 400 hlm • 11 bab</div><span class="badge">HTML • CSS • JS</span><span class="resume" id="res0"></span></div>
+  </div>
+
+  <!-- ============ BUKU 2 : BUKU SAKTI C++ ============ -->
+  <div class="card" onclick="openBook(1)">
+    <div class="cover c2">
+      <div class="tri">▲</div>
+      <div class="a1">BUKU SAKTI</div><div class="a2">PEMROGRAMAN</div><div class="a3">C++</div><div class="a4">UNTUK PEMULA</div><div class="bdg">BEST<br>RECOM-<br>MENDED</div>
+      <svg class="art" viewBox="0 0 300 175" preserveAspectRatio="xMidYMax meet">
+        <g transform="translate(70,22)"><rect x="0" y="0" width="160" height="102" rx="9" fill="#0d1b3f" stroke="#8ea4f5" stroke-width="3"/><rect x="11" y="11" width="138" height="80" rx="4" fill="#f2f6ff"/><circle cx="55" cy="51" r="22" fill="#3f6fe0"/><path d="M47 41 l-12 10 12 10" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M63 41 l12 10 -12 10" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/><rect x="92" y="33" width="46" height="10" rx="3" fill="#c6d4f5"/><rect x="92" y="49" width="36" height="8" rx="3" fill="#d8e2fa"/><rect x="92" y="63" width="42" height="8" rx="3" fill="#c6d4f5"/><rect x="-16" y="102" width="192" height="13" rx="6" fill="#dbe4fa"/></g>
+        <g font-family="Arial" font-weight="bold" text-anchor="middle"><rect x="206" y="0" width="54" height="25" rx="5" fill="#ff5252"/><text x="233" y="17" font-size="13" fill="#fff">C++</text><rect x="8" y="46" width="48" height="23" rx="5" fill="#ffd23f"/><text x="32" y="63" font-size="13" fill="#5b3a00">&lt;/&gt;</text></g>
+        <text x="252" y="66" font-size="27" fill="#9db4ff" font-weight="bold">#</text><text x="12" y="112" font-size="21" fill="#9db4ff" font-weight="bold">{ }</text><text x="258" y="120" font-size="19" fill="#9db4ff" font-weight="bold">&gt;</text><text x="30" y="152" font-size="15" fill="#9db4ff" font-weight="bold">&lt;</text>
+      </svg>
+      <div class="au">RANDI ADRIKA PUTRA</div>
+    </div>
+    <div class="cmeta"><div class="t">BUKU SAKTI PEMROGRAMAN C++ UNTUK PEMULA</div><div class="p"><b>▲</b> Anak Hebat Indonesia • 400 hlm • 12 bab</div><span class="badge">BEST RECOMMENDED</span><span class="resume" id="res1"></span></div>
+  </div>
+
+  <!-- ============ BUKU 3 : BUKU SAKTI WEB ============ -->
+  <div class="card" onclick="openBook(2)">
+    <div class="cover c3">
+      <div class="tri">▲</div>
+      <div class="a1">Buku Sakti<br>Pemrograman</div><div class="a2">Web</div><div class="a3">HTML, CSS, PHP, MYSQL<br>&amp; JAVASCRIPT</div><div class="bdg">EDISI<br>KOVER<br>BARU</div>
+      <svg class="art" viewBox="0 0 300 185" preserveAspectRatio="xMidYMax meet">
+        <g fill="#c98ae8" opacity=".85"><circle cx="30" cy="34" r="11"/><circle cx="30" cy="34" r="4.5" fill="#8e1a8a"/><circle cx="272" cy="34" r="13"/><circle cx="272" cy="34" r="5" fill="#8e1a8a"/></g>
+        <g transform="translate(62,14)"><rect x="0" y="0" width="150" height="98" rx="7" fill="#101528" stroke="#4a3670" stroke-width="3"/><rect x="10" y="10" width="130" height="78" fill="#1a2340"/><rect x="17" y="18" width="48" height="5" rx="2" fill="#63e0b0"/><rect x="17" y="29" width="72" height="5" rx="2" fill="#63a8ff"/><rect x="17" y="40" width="58" height="5" rx="2" fill="#ffd76b"/><rect x="17" y="51" width="68" height="5" rx="2" fill="#ff8fa3"/><rect x="17" y="62" width="42" height="5" rx="2" fill="#63e0b0"/><rect x="17" y="73" width="60" height="5" rx="2" fill="#63a8ff"/><rect x="60" y="98" width="30" height="10" fill="#241d3d"/><rect x="40" y="108" width="70" height="6" rx="3" fill="#241d3d"/></g>
+        <g transform="translate(112,72)"><circle cx="48" cy="12" r="14" fill="#e8b088"/><path d="M34 10 a14 14 0 0 1 28 0 l0 -5 a14 10 0 0 0 -28 0 z" fill="#2b1a10"/><path d="M18 62 q0 -32 30 -32 q30 0 30 32 z" fill="#d63a3a"/></g>
+        <rect x="28" y="134" width="244" height="8" rx="3" fill="#3d2a5e"/>
+        <g font-family="Arial" font-weight="bold" text-anchor="middle"><rect x="4" y="88" width="54" height="24" rx="5" fill="#e44d26"/><text x="31" y="105" font-size="12" fill="#fff">HTML</text><rect x="188" y="60" width="48" height="23" rx="5" fill="#1572b6"/><text x="212" y="76" font-size="11" fill="#fff">CSS</text><rect x="236" y="90" width="60" height="23" rx="5" fill="#0e7c8f"/><text x="266" y="106" font-size="11" fill="#fff">MYSQL</text><rect x="16" y="116" width="46" height="23" rx="5" fill="#8a7bd8"/><text x="39" y="132" font-size="11" fill="#fff">PHP</text><rect x="234" y="118" width="58" height="36" rx="5" fill="#f0b429"/><text x="263" y="133" font-size="10" fill="#5b3a00">JAVA</text><text x="263" y="145" font-size="10" fill="#5b3a00">SCRIPT</text></g>
+      </svg>
+      <div class="au">Didik Setiawan</div>
+    </div>
+    <div class="cmeta"><div class="t">BUKU SAKTI PEMROGRAMAN WEB (EDISI KOVER BARU)</div><div class="p"><b>▲</b> Anak Hebat Indonesia • 400 hlm • 10 bab</div><span class="badge">PHP • MySQL • JS</span><span class="resume" id="res2"></span></div>
+  </div>
+
+  <!-- ============ BUKU 4 : C++ DARI NOL ============ -->
+  <div class="card" onclick="openBook(3)">
+    <div class="cover c4">
+      <div class="tri">▲</div>
+      <div class="a1">Belajar</div><div class="a2">Pemrograman</div><div class="a3">C++ dari Nol</div><div class="pil">Panduan Praktis untuk Pemula</div>
+      <div class="chk"><div>☑ Struktur Dasar Program C++</div><div>☑ Variabel dan Tipe Data C++</div><div>☑ Struktur dan Konsep dalam C++</div><div>☑ Manipulasi File dalam Program C++</div><div>☑ Pemrograman Berorientasi Objek</div></div>
+      <div class="au"><b>Farhatul</b><span>Fityah, S.T., M.Sc.</span></div>
+      <svg class="art" viewBox="0 0 300 160" preserveAspectRatio="xMidYMax meet">
+        <text x="14" y="46" font-size="28" font-weight="900" fill="#ffffff" opacity=".75" transform="rotate(-9 14 46)">C++</text>
+        <text x="252" y="26" font-size="20" font-weight="900" fill="#9fe8ff" opacity=".85" transform="rotate(10 252 26)">C++</text>
+        <g transform="translate(118,4)"><rect x="0" y="0" width="142" height="92" rx="7" fill="#0f1b3f" stroke="#8f7cf5" stroke-width="3"/><rect x="9" y="9" width="124" height="74" fill="#182456"/><rect x="15" y="16" width="54" height="5" rx="2" fill="#7ee0b8"/><rect x="15" y="27" width="82" height="5" rx="2" fill="#7fb0ff"/><rect x="15" y="38" width="66" height="5" rx="2" fill="#ffd76b"/><rect x="15" y="49" width="76" height="5" rx="2" fill="#ff9fb0"/><rect x="15" y="60" width="46" height="5" rx="2" fill="#7ee0b8"/><rect x="57" y="92" width="28" height="9" fill="#241d5e"/><rect x="38" y="101" width="66" height="6" rx="3" fill="#241d5e"/></g>
+        <g transform="translate(52,108)"><rect x="0" y="0" width="22" height="26" rx="3" fill="#e05a4e"/><path d="M22 7 h6 a6 6 0 0 1 0 13 h-6" fill="none" stroke="#e05a4e" stroke-width="4"/><rect x="4" y="-6" width="14" height="5" rx="2" fill="#f5f0e8"/></g>
+        <g transform="translate(120,118) skewX(-12)"><rect x="0" y="0" width="130" height="30" rx="5" fill="#e9edf8"/><g fill="#c3cbe0"><rect x="7" y="5" width="16" height="7" rx="2"/><rect x="26" y="5" width="16" height="7" rx="2"/><rect x="45" y="5" width="16" height="7" rx="2"/><rect x="64" y="5" width="16" height="7" rx="2"/><rect x="83" y="5" width="16" height="7" rx="2"/><rect x="102" y="5" width="20" height="7" rx="2"/><rect x="10" y="16" width="52" height="7" rx="2"/><rect x="66" y="16" width="16" height="7" rx="2"/><rect x="86" y="16" width="36" height="7" rx="2"/></g></g>
+        <ellipse cx="262" cy="146" rx="17" ry="7" fill="#dfe4f2"/><ellipse cx="262" cy="141" rx="17" ry="7" fill="#c9d2ea"/>
+      </svg>
+    </div>
+    <div class="cmeta"><div class="t">BELAJAR PEMROGRAMAN C++ DARI NOL</div><div class="p"><b>▲</b> Anak Hebat Indonesia • 400 hlm • 12 bab</div><span class="badge">Panduan Praktis</span><span class="resume" id="res3"></span></div>
+  </div>
+
+  <!-- ============ KARTU KOLEKTOR OTOMATIS ============ -->
+  <div class="more" id="moreCard" onclick="openAdd()">
+    <div class="plus">＋</div>
+    <b>Kumpulkan Buku Otomatis</b>
+    <span>🔍 Cari lewat penelusuran online — sampul, judul &amp; jumlah halaman (setebal apa pun) terkumpul sendiri<br><br>📤 Atau upload gambar sampul — buku langsung jadi &amp; bisa dibaca</span>
+  </div>
+</div>
+
+<!-- ================= MODAL TAMBAH BUKU ================= -->
+<div class="overlay" id="addOv">
+  <div class="addbox">
+    <button class="x" onclick="closeAdd()">✕</button>
+    <h3>🤖 Kolektor Buku Otomatis</h3>
+    <div class="tabs2">
+      <button id="tb0" class="on" onclick="tab(0)">🔍 Cari Online (Otomatis)</button>
+      <button id="tb1" onclick="tab(1)">📤 Upload Gambar Sampul</button>
+    </div>
+
+    <div id="pane0">
+      <div class="srow">
+        <input id="q" placeholder="Ketik judul buku… mis: belajar python, buku java, html css" onkeydown="if(event.key==='Enter')searchBooks()">
+        <button id="btnSearch" onclick="searchBooks()">Cari</button>
+      </div>
+      <div class="hint">🌐 Data diambil otomatis dari <b>Google Books</b>: gambar sampul, judul, penulis, penerbit, dan <b>jumlah halaman setebal apa pun terdeteksi sendiri</b>. Klik "＋ Tambah" — buku langsung masuk rak &amp; bisa dibaca.</div>
+      <div id="results"></div>
+    </div>
+
+    <div id="pane1" style="display:none">
+      <label class="drop">📤 <b>Klik untuk pilih gambar sampul buku</b><br><span>JPG / PNG — otomatis dikompres &amp; disimpan</span><input type="file" id="upFile" accept="image/*" hidden></label>
+      <img id="prev" class="prev" alt="">
+      <div class="frow">
+        <input id="upTitle" placeholder="Judul buku * (wajib)">
+        <input id="upAuthor" placeholder="Penulis (opsional)">
+        <input id="upPages" type="number" min="40" placeholder="Jumlah halaman (kosongkan = otomatis 400)">
+      </div>
+      <div class="hint">🤖 Topik buku (C++, Python, Web, PHP, Java…) dikenali otomatis dari judulnya — isi buku, bab, dan contoh kode disiapkan otomatis.</div>
+      <button class="addbig" onclick="addUpload()">＋ Tambah ke Rak</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ================= READER ================= -->
+<div id="reader">
+  <div class="rtop">
+    <button onclick="closeBook()">← Rak Buku</button>
+    <div class="rtt"><div class="t1" id="rTitle"></div><div class="t2" id="rChap"></div></div>
+    <span class="rpct" id="rPct"></span>
+    <button onclick="fSz(-1)">A−</button><button onclick="fSz(1)">A+</button>
+    <button onclick="document.getElementById('rside').classList.toggle('open')">☰ Daftar Isi</button>
+    <button onclick="closeBook()">✕</button>
+  </div>
+  <div class="barw"><div id="bar"></div></div>
+  <div class="rwrap">
+    <div class="rside" id="rside"></div>
+    <div class="rmain" id="rmain"><div class="paper" id="paper"></div></div>
+  </div>
+  <div class="rbot">
+    <button onclick="goTo(1)">⏮ Awal</button>
+    <button onclick="goTo(curPage-1)">◀ Sebelumnya</button>
+    <input type="number" id="pgInput" min="1" value="1" onchange="goTo(+this.value)">
+    <button onclick="goTo(curPage+1)">Berikutnya ▶</button>
+    <button onclick="goTo(cur.pages)">Akhir ⏭</button>
+    <input type="range" id="slider" min="1" max="400" value="1" oninput="goTo(+this.value)">
+    <span class="totpg" id="totPg"></span>
+  </div>
+</div>
+
+<script>
+/* ================= BUKU STATIS ================= */
+const books=[
+{id:'web1',seed:11,lang:'HTML/CSS/JS',theme:'#1a4fc4',pages:400,
+ title:'Belajar Pemrograman Web untuk Pemula',author:'Kristianto Haryodi',pub:'Anak Hebat Indonesia',
+ chapters:[
+ {t:'Pengenalan Sepenuh Web Development',s:['sejarah dan perkembangan web','cara kerja browser, server, dan DNS','istilah domain, hosting, dan alamat IP','perbedaan frontend dan backend']},
+ {t:'Dasar-Dasar Pemrograman Dokumen HTML',s:['struktur dasar dokumen HTML','tag, elemen, dan atribut','heading, paragraf, dan format teks','gambar, tautan, dan list']},
+ {t:'Form dan Tabel HTML',s:['membuat formulir input','jenis-jenis input pada form','menyusun data dengan tabel','menggabungkan sel dengan colspan dan rowspan']},
+ {t:'Mengenal CSS',s:['cara menautkan CSS ke HTML','selector, properti, dan value','model kotak (box model)','warna, font, dan latar belakang']},
+ {t:'CSS Layout dan Flexbox',s:['konsep display dan position','menyusun elemen dengan flexbox','pengaturan justify-content dan align-items','membuat menu navigasi dengan flex']},
+ {t:'CSS Grid dan Responsive Design',s:['dasar grid-template-columns','pendekatan mobile-first','media query','unit relatif: em, rem, vw, dan vh']},
+ {t:'Dasar-Dasar JavaScript',s:['variabel dan tipe data','operator dan percabangan','perulangan','fungsi dan scope']},
+ {t:'DOM dan Event Handling',s:['mengenal struktur DOM','memilih elemen dengan selector','mengubah isi dan gaya elemen','event klik, input, dan submit']},
+ {t:'Pemrograman OOP JavaScript',s:['objek dan properti','constructor function dan class','prototype','enkapsulasi sederhana']},
+ {t:'Studi Kasus: Membangun Web Statis',s:['perencanaan struktur halaman','menyusun layout dengan CSS','menambahkan interaksi JavaScript','optimasi gambar dan aset']},
+ {t:'Deploy dan Hosting Website',s:['memilih layanan hosting','mengunggah file melalui FTP','menghubungkan custom domain','ceklis sebelum situs dirilis']}]},
+{id:'cpp1',seed:27,lang:'C++',theme:'#7a3fd4',pages:400,
+ title:'BUKU SAKTI PEMROGRAMAN C++ UNTUK PEMULA',author:'Randi Adrika Putra',pub:'Anak Hebat Indonesia',
+ chapters:[
+ {t:'Mengenal Bahasa C++',s:['sejarah dan keunggulan C++','bidang penggunaan C++','proses kompilasi dari kode ke program','bahasa tingkat tinggi vs tingkat rendah']},
+ {t:'Instalasi dan Konfigurasi Tools',s:['memilih IDE: Code::Blocks, Dev-C++, VS Code','menginstal compiler MinGW','membuat proyek pertama','menjalankan program pertama']},
+ {t:'Struktur Program C++',s:['preprocessor #include','fungsi main()','statement dan blok kode','penulisan komentar']},
+ {t:'Variabel, Konstanta, dan Tipe Data',s:['tipe data primitif','deklarasi dan inisialisasi variabel','konstanta dengan const','konversi tipe data (casting)']},
+ {t:'Operator dan Ekspresi',s:['operator aritmatika','operator relasi dan logika','operator penugasan','precedence (urutan operasi)']},
+ {t:'Input/Output cin dan cout',s:['menerima masukan dengan cin','menampilkan keluaran dengan cout','memformat output','membaca beberapa input sekaligus']},
+ {t:'Percabangan',s:['if dan else','if bersarang (nested if)','switch-case','operator ternary']},
+ {t:'Perulangan',s:['perulangan for','perulangan while','perulangan do-while','nested loop, break, dan continue']},
+ {t:'Array dan String',s:['array satu dimensi','array multidimensi','string sebagai array karakter','fungsi-fungsi manipulasi string']},
+ {t:'Fungsi dan Rekursi',s:['deklarasi dan definisi fungsi','parameter dan argumen','nilai kembalian (return value)','konsep rekursi']},
+ {t:'Pointer dan Reference',s:['mengenal alamat memori','mendeklarasikan pointer','dereference operator *','reference sebagai alias']},
+ {t:'Latihan Soal dan Pembahasan',s:['soal pilihan ganda','soal isian kode','studi kasus program kecil','pembahasan lengkap step-by-step']}]},
+{id:'web2',seed:43,lang:'PHP/MySQL',theme:'#a2167a',pages:400,
+ title:'BUKU SAKTI PEMROGRAMAN WEB (EDISI KOVER BARU)',author:'Didik Setiawan',pub:'Anak Hebat Indonesia',
+ chapters:[
+ {t:'Pengenalan Pemrograman Web',s:['arsitektur client-server','website statis vs dinamis','peran PHP, MySQL, dan JavaScript','instalasi XAMPP']},
+ {t:'HTML Dasar',s:['struktur dokumen HTML','form dan atribut validasi','tabel dan list','semantic HTML']},
+ {t:'CSS Styling',s:['selector dan spesifisitas','box model','flexbox dan grid','transisi sederhana']},
+ {t:'PHP: Sintaks dan Variabel',s:['menulis skrip PHP pertama','variabel dan tipe data','operator','percabangan dan perulangan']},
+ {t:'PHP: Form Handling',s:['metode GET dan POST','validasi input di sisi server','sanitasi dengan htmlspecialchars','menangani unggah file']},
+ {t:'MySQL: Database dan Query',s:['membuat database dan tabel','tipe data MySQL','SELECT, INSERT, UPDATE, DELETE','menggabungkan tabel dengan JOIN']},
+ {t:'Integrasi PHP + MySQL (CRUD)',s:['koneksi database dengan mysqli','menampilkan data dari tabel','menambah dan mengubah data','menghapus data']},
+ {t:'JavaScript Dasar',s:['sintaks dan variabel','manipulasi DOM','event handling','validasi form di sisi klien']},
+ {t:'Session, Cookie, dan Login',s:['mengenal session','membuat halaman login','logout dan keamanan dasar','penggunaan cookie']},
+ {t:'Studi Kasus: Aplikasi Web Lengkap',s:['perancangan database','membangun modul CRUD','menggabungkan tampilan dan logika','pengujian aplikasi']}]},
+{id:'cpp2',seed:61,lang:'C++',theme:'#4a2a9d',pages:400,
+ title:'BELAJAR PEMROGRAMAN C++ DARI NOL',author:'Farhatul Fityah, S.T., M.Sc.',pub:'Anak Hebat Indonesia',
+ chapters:[
+ {t:'Pengenalan Bahasa C++ dan IDE',s:['mengapa memilih C++','memilih IDE yang tepat','instalasi compiler','menulis program pertama']},
+ {t:'Struktur Dasar Program C++',s:['header dan namespace','fungsi main()','statement dan tanda titik koma','komentar dan dokumentasi kode']},
+ {t:'Variabel dan Tipe Data C++',s:['int, float, dan double','char dan bool','string','konstanta']},
+ {t:'Operator dan Ekspresi',s:['operator aritmatika','increment dan decrement','operator relasi dan logika','operator bitwise']},
+ {t:'Percabangan Program',s:['if-else','switch-case','nested if','studi kasus kalkulator sederhana']},
+ {t:'Perulangan',s:['perulangan for','perulangan while','perulangan do-while','break dan continue']},
+ {t:'Array',s:['array satu dimensi','array dua dimensi','array dan perulangan','studi kasus nilai mahasiswa']},
+ {t:'Fungsi',s:['mendeklarasikan fungsi','parameter dan return','fungsi prototype','overloading sederhana']},
+ {t:'Struktur dan Enum',s:['mendeklarasikan struct','mengakses anggota struct','array of struct','penggunaan enum']},
+ {t:'Manipulasi File',s:['membuka dan menutup file','menulis ke file dengan ofstream','membaca file dengan ifstream','studi kasus penyimpanan data']},
+ {t:'Pemrograman Berorientasi Objek',s:['class dan object','access specifier: public, private, protected','constructor dan destructor','inheritance dasar']},
+ {t:'Proyek Akhir: Aplikasi Konsol',s:['perencanaan aplikasi','membuat menu program','menggabungkan seluruh konsep','pengembangan lanjutan']}]}
+];
+
+/* ================= BANK KODE ================= */
+const CPP=['#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}','int umur;\ncout << "Masukkan umur: ";\ncin >> umur;\n\nif (umur >= 17) {\n    cout << "Anda dewasa" << endl;\n} else {\n    cout << "Anda masih remaja" << endl;\n}','int total = 0;\nfor (int i = 1; i <= 10; i++) {\n    total += i;\n}\ncout << "Total: " << total << endl;','int faktorial(int n) {\n    if (n <= 1) return 1;\n    return n * faktorial(n - 1);\n}','float nilai[5] = {80, 75, 90, 85, 70};\nfloat jumlah = 0;\nfor (int i = 0; i < 5; i++) {\n    jumlah += nilai[i];\n}\ncout << "Rata-rata: " << jumlah / 5;','class Mahasiswa {\n  public:\n    string nama;\n    int umur;\n    void perkenalan() {\n        cout << "Halo, saya " << nama << endl;\n    }\n};','ofstream file("data.txt");\nfile << "Belajar C++ itu menyenangkan" << endl;\nfile.close();'];
+const WEB=['<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="UTF-8">\n  <title>Web Pertamaku</title>\n</head>\n<body>\n  <h1>Halo, Dunia!</h1>\n  <p>Ini halaman web pertama saya.</p>\n</body>\n</html>','.kartu {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n  padding: 20px;\n  border-radius: 12px;\n  background: #ffffff;\n  box-shadow: 0 4px 12px rgba(0,0,0,.1);\n}','document.querySelector("#tombol")\n  .addEventListener("click", function () {\n    alert("Tombol diklik!");\n  });','const angka = [1, 2, 3, 4, 5];\nconst kuadrat = angka.map(n => n * n);\nconsole.log(kuadrat); // [1,4,9,16,25]','@media (max-width: 600px) {\n  .menu { flex-direction: column; }\n  .konten { padding: 12px; }\n}'];
+const PHP=['<?php\n$nama = "Budi";\n$umur = 20;\necho "Halo, nama saya $nama, umur $umur tahun.";\n?>','$nama = htmlspecialchars($_POST["nama"]);\nif (empty($nama)) {\n    echo "Nama wajib diisi!";\n} else {\n    echo "Selamat datang, $nama";\n}','$conn = mysqli_connect("localhost", "root", "", "sekolah");\n$result = mysqli_query($conn, "SELECT * FROM siswa");\nwhile ($row = mysqli_fetch_assoc($result)) {\n    echo $row["nama"] . "<br>";\n}','$stmt = $conn->prepare("INSERT INTO siswa (nama, kelas) VALUES (?, ?)");\n$stmt->bind_param("ss", $nama, $kelas);\n$stmt->execute();','session_start();\nif (!isset($_SESSION["login"])) {\n    header("Location: login.php");\n    exit;\n}'];
+const PY=['nama = input("Masukkan nama: ")\nprint(f"Halo, {nama}! Selamat belajar.")','nilai = [80, 75, 90, 85]\nrata = sum(nilai) / len(nilai)\nprint(f"Rata-rata: {rata:.2f}")','for i in range(1, 11):\n    if i % 2 == 0:\n        print(i, "adalah bilangan genap")','class Mahasiswa:\n    def __init__(self, nama):\n        self.nama = nama\n    def perkenalan(self):\n        print(f"Halo, saya {self.nama}")','with open("data.txt", "w") as f:\n    f.write("Belajar Python itu menyenangkan\\n")'];
+const JAVA=['public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}','Scanner input = new Scanner(System.in);\nint umur = input.nextInt();\nif (umur >= 17) {\n    System.out.println("Dewasa");\n}','int total = 0;\nfor (int i = 1; i <= 10; i++) {\n    total += i;\n}\nSystem.out.println("Total: " + total);','class Mahasiswa {\n    String nama;\n    Mahasiswa(String nama) { this.nama = nama; }\n    void perkenalan() { System.out.println("Halo, saya " + nama); }\n}'];
+const MIX=['ALGORITMA HitungRataRata\n  total ← 0\n  UNTUK i ← 1 SAMPAI n LAKUKAN\n    total ← total + nilai[i]\n  rata ← total / n\nTAMPILKAN rata','MULAI\n  BACA data\n  PROSES data\n  SIMPAN hasil\nSELESAI'];
+
+books[0].snips=WEB; books[1].snips=CPP; books[2].snips=PHP; books[3].snips=CPP;
+books.forEach(b=>{const n=b.chapters.length;b.chapters.forEach((c,i)=>c.start=5+Math.round(i*395/n));});
+
+/* ================= TEMPLATE BUKU OTOMATIS (per topik) ================= */
+const TPL={
+cpp:{lang:'C++',theme:'#7a3fd4',chapters:books[1].chapters,snips:CPP},
+web:{lang:'HTML/CSS/JS',theme:'#1a4fc4',chapters:books[0].chapters,snips:WEB},
+php:{lang:'PHP/MySQL',theme:'#a2167a',chapters:books[2].chapters,snips:PHP},
+py:{lang:'Python',theme:'#2b6cb0',snips:PY,chapters:[
+ {t:'Pengenalan Bahasa Python',s:['keunggulan Python','instalasi Python dan VS Code','menjalankan skrip pertama','interpreter vs compiler']},
+ {t:'Variabel dan Tipe Data',s:['variabel dinamis','angka dan string','boolean dan None','konversi tipe']},
+ {t:'Operator',s:['operator aritmatika','perbandingan dan logika','operator in dan is']},
+ {t:'Percabangan',s:['if, elif, else','operator ternary','studi kasus penilaian']},
+ {t:'Perulangan',s:['for dan range','while','break dan continue']},
+ {t:'List, Tuple, dan Set',s:['membuat dan mengakses list','slicing','tuple immutable','set dan uniqueness']},
+ {t:'Dictionary',s:['key dan value','method dict populer','iterasi dictionary']},
+ {t:'Fungsi',s:['def dan return','argument default','*args dan **kwargs','lambda']},
+ {t:'String dan Manipulasinya',s:['method string','f-string','split dan join']},
+ {t:'File Handling',s:['mode baca dan tulis','with statement','membaca CSV']},
+ {t:'Pemrograman OOP',s:['class dan object','constructor __init__','inheritance','encapsulation']},
+ {t:'Proyek Akhir',s:['perencanaan program','menu interaktif','menggabungkan semua konsep']}]},
+java:{lang:'Java',theme:'#d97706',snips:JAVA,chapters:[
+ {t:'Pengenalan Bahasa Java',s:['sejarah dan JVM','keunggulan Java','bidang penggunaan']},
+ {t:'Instalasi JDK dan IDE',s:['mengunduh JDK','setting PATH','membuat proyek di IntelliJ/Eclipse']},
+ {t:'Struktur Program Java',s:['class dan main method','statement dan komentar','kompilasi dan eksekusi']},
+ {t:'Variabel dan Tipe Data',s:['tipe data primitif','deklarasi variabel','casting']},
+ {t:'Operator',s:['aritmatika','relasi dan logika','increment dan decrement']},
+ {t:'Input/Output Scanner',s:['mengenal class Scanner','membaca input','memformat output']},
+ {t:'Percabangan',s:['if-else','switch-case','studi kasus']},
+ {t:'Perulangan',s:['for','while dan do-while','break dan continue']},
+ {t:'Array',s:['array satu dimensi','array multidimensi','iterasi array']},
+ {t:'Method',s:['deklarasi method','parameter dan return','method overloading']},
+ {t:'OOP: Class dan Object',s:['mendefinisikan class','constructor','encapsulation','inheritance']},
+ {t:'Proyek Akhir',s:['perencanaan aplikasi konsol','menu program','penggabungan konsep']}]},
+gen:{lang:'Pemrograman',theme:'#0f766e',snips:MIX,chapters:[
+ {t:'Pengenalan Pemrograman',s:['apa itu program','bahasa pemrograman','alur berpikir komputer']},
+ {t:'Logika dan Algoritma',s:['definisi algoritma','pseudocode','flowchart']},
+ {t:'Variabel dan Tipe Data',s:['konsep variabel','tipe data umum','penamaan yang baik']},
+ {t:'Input dan Output',s:['menerima masukan','menampilkan keluaran','alur data program']},
+ {t:'Percabangan',s:['kondisi if-else','kondisi bersarang','studi kasus']},
+ {t:'Perulangan',s:['konsep loop','for dan while','menghindari infinite loop']},
+ {t:'Fungsi',s:['memecah program menjadi fungsi','parameter dan return','manfaat modularitas']},
+ {t:'Struktur Data Dasar',s:['array dan list','stack dan queue','kapan memakai apa']},
+ {t:'Debugging dan Error Handling',s:['jenis-jenis error','membaca pesan error','teknik debugging']},
+ {t:'Studi Kasus',s:['analisis kebutuhan','menyusun algoritma','implementasi kode']},
+ {t:'Proyek Akhir',s:['perencanaan proyek','penerapan seluruh konsep','langkah pengembangan lanjutan']}]}};
+
+function detectTopic(t){t=(t||'').toLowerCase();
+ if(/c\+\+|cpp/.test(t))return'cpp';
+ if(/python/.test(t))return'py';
+ if(/java(?!script)/.test(t))return'java';
+ if(/javascript|html|css|frontend|front-end/.test(t))return'web';
+ if(/php|mysql|web|laravel|backend|back-end/.test(t))return'php';
+ return'gen';}
+
+function makeBook(m){
+ const tp=TPL[detectTopic(m.title)];
+ const b={id:m.id||('c'+Date.now().toString(36)+Math.floor(Math.random()*999)),
+  seed:Math.floor(Math.random()*9999),lang:tp.lang,theme:tp.theme,
+  pages:Math.min(2000,Math.max(40,m.pages||400)),
+  title:m.title,author:m.author||'Anonim',pub:m.pub||'Koleksi Pribadi',cover:m.cover||''};
+ b.chapters=JSON.parse(JSON.stringify(tp.chapters));
+ const n=b.chapters.length;b.chapters.forEach((c,i)=>c.start=5+Math.round(i*395/n));
+ b.snips=tp.snips.slice();
+ return b;}
+
+/* ================= KOLEKSI PENGGUNA (localStorage) ================= */
+let customs=[];
+function allBooks(){return books.concat(customs);}
+function saveCustoms(){try{localStorage.setItem('bd711_customs',JSON.stringify(customs));}catch(e){toast('⚠️ Penyimpanan browser penuh — hapus beberapa buku');}}
+function loadCustoms(){try{const d=JSON.parse(localStorage.getItem('bd711_customs')||'[]');customs=d.map(makeBook);}catch(e){customs=[];}}
+
+function renderCustoms(){
+ document.querySelectorAll('.card.custom').forEach(e=>e.remove());
+ let html='';
+ customs.forEach((b,i)=>{
+  const gi=books.length+i;
+  const cov=b.cover?`<img class="cimg" src="${b.cover}" alt=""><div class="tri">▲</div>`
+    :`<div class="cph" style="background:${b.theme}">${b.title}</div><div class="tri">▲</div>`;
+  html+=`<div class="card custom" onclick="openBook(${gi})">
+   <div class="cover" style="background:${b.theme}">${cov}<button class="del" title="Hapus dari rak" onclick="event.stopPropagation();delCustom(${gi})">✕</button></div>
+   <div class="cmeta"><div class="t">${b.title}</div><div class="p">🤖 Koleksi Otomatis • ${b.pages} hlm • ${b.chapters.length} bab</div><span class="badge">${b.lang}</span><span class="resume" id="res${gi}"></span></div></div>`;});
+ $('#moreCard').insertAdjacentHTML('beforebegin',html);}
+
+function delCustom(gi){const b=allBooks()[gi];customs.splice(gi-books.length,1);saveCustoms();renderCustoms();refreshBadges();updateStats();toast('🗑️ "'+b.title+'" dihapus dari rak');}
+
+/* ================= MODAL TAMBAH ================= */
+let apiItems=[],upCover='';
+const $=s=>document.querySelector(s);
+function openAdd(){$('#addOv').classList.add('show');}
+function closeAdd(){$('#addOv').classList.remove('show');}
+function tab(n){[0,1].forEach(i=>{$('#tb'+i).classList.toggle('on',i===n);$('#pane'+i).style.display=i===n?'':'none';});}
+
+async function searchBooks(){
+ const q=$('#q').value.trim();if(!q)return toast('Ketik judul buku dulu 🔍');
+ const btn=$('#btnSearch');btn.disabled=true;btn.textContent='Mencari…';
+ $('#results').innerHTML='<div class="hint">⏳ Mengumpulkan data buku dari penelusuran online…</div>';
+ try{
+  const r=await fetch('https://www.googleapis.com/books/v1/volumes?q='+encodeURIComponent(q)+'&maxResults=24');
+  const d=await r.json();
+  apiItems=(d.items||[]).map(it=>{const v=it.volumeInfo||{};return{
+   title:v.title||'Tanpa Judul',author:(v.authors||[]).join(', ')||'Anonim',
+   pub:v.publisher||'Google Books',pages:v.pageCount||400,
+   cover:((v.imageLinks&&(v.imageLinks.thumbnail||v.imageLinks.smallThumbnail))||'').replace('http://','https://').replace('zoom=1','zoom=2')};});
+  $('#results').innerHTML=apiItems.length?apiItems.map((b,i)=>
+   `<div class="ritem">${b.cover?`<img src="${b.cover}" onerror="this.outerHTML='<div class=\\'rph\\'>📕</div>'">`:'<div class="rph">📕</div>'}<div class="rinf"><b>${b.title}</b><span>${b.author} • ${b.pub}</span><span class="pgs">📄 ${b.pages} halaman • topik: ${TPL[detectTopic(b.title)].lang} (otomatis)</span></div><button onclick="addFromApi(${i})">＋ Tambah</button></div>`).join('')
+   :'<div class="hint">Tidak ada hasil. Coba kata kunci lain.</div>';
+ }catch(e){$('#results').innerHTML='<div class="hint">⚠️ Gagal terhubung ke penelusuran online. Periksa koneksi internet, atau gunakan tab <b>📤 Upload Gambar Sampul</b>.</div>';}
+ btn.disabled=false;btn.textContent='Cari';}
+
+function addFromApi(i){const m=apiItems[i];if(!m)return;
+ customs.push(makeBook(m));saveCustoms();renderCustoms();refreshBadges();updateStats();
+ toast('✅ "'+m.title+'" masuk rak — '+m.pages+' halaman siap dibaca!');}
+
+function fileToCover(file,cb){const img=new Image(),fr=new FileReader();
+ fr.onload=e=>{img.onload=()=>{const c=document.createElement('canvas'),max=420,s=Math.min(1,max/Math.max(img.width,img.height));
+  c.width=img.width*s;c.height=img.height*s;c.getContext('2d').drawImage(img,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.82));};img.src=e.target.result;};
+ fr.readAsDataURL(file);}
+
+document.addEventListener('change',e=>{if(e.target.id!=='upFile')return;const f=e.target.files[0];if(!f)return;fileToCover(f,d=>{upCover=d;$('#prev').src=d;$('#prev').style.display='block';});});
+
+function addUpload(){const t=$('#upTitle').value.trim();if(!t)return toast('Judul buku wajib diisi ✍️');
+ const b=makeBook({title:t,author:$('#upAuthor').value.trim()||'Anonim',pages:+$('#upPages').value||400,cover:upCover});
+ customs.push(b);saveCustoms();renderCustoms();refreshBadges();updateStats();closeAdd();
+ toast('✅ "'+t+'" masuk rak — '+b.pages+' halaman siap dibaca!');
+ $('#upTitle').value='';$('#upAuthor').value='';$('#upPages').value='';upCover='';$('#prev').style.display='none';}
+
+let tT;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),2800);}
+
+/* ================= BANK KALIMAT ================= */
+const P={
+open:["Pada bagian ini, kita akan membahas {t} secara menyeluruh dan bertahap.","Sebelum melangkah lebih jauh, penting bagi Anda untuk memahami {t} terlebih dahulu.","{t} merupakan salah satu materi kunci yang wajib dikuasai oleh setiap pemrogram.","Topik {t} sering dianggap sulit oleh pemula, padahal konsep dasarnya sangat logis.","Mari kita pelajari {t} melalui contoh-contoh yang sederhana dan mudah diikuti.","Bab tentang {t} dirancang agar pembaca pemula dapat mengikuti setiap langkahnya."],
+el:["Dalam praktiknya, {t} sering dikaitkan dengan {s}.","Pemahaman yang baik tentang {s} akan sangat membantu ketika Anda mengerjakan proyek nyata.","Banyak pemula melewatkan {s}, padahal bagian ini adalah fondasi dari {t}.","Perhatikan bahwa setiap bagian yang berkaitan dengan {s} memiliki peran masing-masing.","Dengan menguasai {s}, Anda dapat menulis kode yang lebih rapi, efisien, dan mudah dipelihara.","Jangan khawatir jika {s} terasa asing di awal — teruslah berlatih secara bertahap.","Para pengembang profesional selalu memastikan aspek {s} dikerjakan dengan teliti.","Pada titik ini, penting untuk mencoba sendiri setiap contoh yang berkaitan dengan {s}."],
+bullets:["Memahami konsep dasar {t} dari nol","Mengenal istilah-istilah penting di sekitar {s}","Menuliskan kode pertama yang melibatkan {s}","Menghindari kesalahan umum pemula pada {t}","Menerapkan {s} dalam studi kasus mini","Menguji hasil kode dan membaca pesan error dengan tenang","Membiasakan diri dengan alur kerja programmer profesional","Menyusun latihan mandiri di akhir sesi belajar"],
+tips:["💡 <b>Tips:</b> biasakan menulis kode sedikit demi sedikit sambil langsung mencobanya.","💡 <b>Tips:</b> jangan hanya membaca — ketik ulang setiap contoh kode di komputer Anda.","💡 <b>Tips:</b> gunakan komentar untuk menandai bagian kode yang belum Anda pahami.","💡 <b>Tips:</b> jika menemui error, baca pesan errornya perlahan; biasanya petunjuknya ada di sana.","💡 <b>Tips:</b> simpan setiap latihan dalam folder terpisah agar mudah ditinjau kembali.","💡 <b>Tips:</b> istirahat sejenak setiap 45 menit agar otak lebih mudah menyerap materi."],
+close:["Di halaman berikutnya, kita akan melanjutkan ke contoh yang lebih kompleks.","Setelah memahami bagian ini, cobalah mengerjakan latihan singkat di akhir bab.","Konsep ini akan terus dipakai pada bab-bab selanjutnya, jadi pastikan Anda benar-benar paham.","Luangkan waktu sejenak untuk merangkum poin-poin penting sebelum berlanjut."]};
+
+/* ================= UTIL ================= */
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function rng(seed){let t=seed+0x6D2B79F5;return function(){t|=0;t=t+0x6D2B79F5|0;let r=Math.imul(t^t>>>15,1|t);r=r+Math.imul(r^r>>>7,61|r)^r;return((r^r>>>14)>>>0)/4294967296;}}
+function chapterOf(b,n){for(let i=b.chapters.length-1;i>=0;i--)if(n>=b.chapters[i].start)return i;return 0;}
+
+/* ================= RENDER HALAMAN ================= */
+function pageHTML(b,n){
+ if(n===1)return `<div class="tp"><div class="ln"></div><h1>${b.title}</h1><p class="au2">oleh <b>${b.author}</b></p><div class="ln"></div><p class="pb">${b.pub}</p><p class="ed">Edisi Digital • ${b.pages} Halaman</p><div class="folio">— 1 —</div></div>`;
+ if(n===2)return `<h1>Kata Pengantar</h1><p>Buku ini ditulis untuk siapa saja yang ingin menguasai pemrograman mulai dari nol, tanpa perlu latar belakang IT sekalipun. Setiap konsep dijelaskan dengan bahasa yang sederhana, disertai contoh kode dan latihan yang bisa langsung dipraktikkan.</p><p>Urutan bab disusun secara bertingkat: dimulai dari konsep paling dasar, dilanjutkan dengan latihan terbimbing, hingga studi kasus yang menantang. Bacalah secara berurutan, dan ketik ulang setiap contoh kode agar pemahaman Anda semakin kokoh.</p><p>Selamat belajar, dan jangan pernah takut mencoba — kesalahan adalah bagian terbaik dari proses belajar pemrograman.</p><p style="text-align:right;margin-top:30px"><i>— ${b.author}</i></p><div class="folio">— 2 —</div>`;
+ if(n===3){let h='<h1>Daftar Isi</h1>';const row=(t,p)=>`<div class="toc-row" onclick="goTo(${p})"><span>${t}</span><span class="dots"></span><span>${p}</span></div>`;
+  h+=row('Sampul',1)+row('Kata Pengantar',2)+row('Panduan Membaca Buku Ini',4);
+  b.chapters.forEach((c,i)=>h+=row(`Bab ${i+1} — ${c.t}`,c.start));
+  h+=row('Penutup',b.pages);return h+`<div class="folio">— 3 —</div>`;}
+ if(n===4)return `<h1>Panduan Membaca Buku Ini</h1><p>Agar maksimal, ikuti cara membaca berikut:</p><div class="poin"><div class="poin-t">📌 Cara Efektif Membaca</div><ul><li>Baca satu bab per sesi belajar (±30 halaman).</li><li>Ketik ulang semua contoh kode — jangan copy-paste.</li><li>Kerjakan setiap kotak <b>Latihan</b> sebelum lanjut bab berikutnya.</li><li>Gunakan kotak <b>Tips</b> sebagai pengingat praktik terbaik.</li></ul></div><p>Anda bebas melompat ke bab mana pun melalui <b>Daftar Isi</b> di panel kiri. Progres bacaan Anda tersimpan otomatis.</p><div class="folio">— 4 —</div>`;
+ if(n===b.pages)return `<h1>Penutup</h1><p>Selamat! Anda telah menyelesaikan seluruh ${b.pages} halaman <b>${b.title}</b>. Perjalanan menyelesaikan satu buku pemrograman adalah pencapaian yang nyata — tidak banyak orang yang melakukannya.</p><p>Langkah selanjutnya: bangun proyek kecil milik Anda sendiri, kembali ke bab-bab yang terasa berat, dan bagikan ilmu Anda kepada orang lain. Mengajar adalah cara tercepat untuk menguasai sebuah topik.</p><p style="text-align:center;font-size:20px;margin-top:40px"><b>🎉 — Selesai — 🎉</b></p><div class="folio">— ${n} —</div>`;
+ const ci=chapterOf(b,n),ch=b.chapters[ci],local=n-ch.start,r=rng(n*131+b.seed);
+ const pick=a=>a[Math.floor(r()*a.length)];
+ const s=ch.s[Math.floor(r()*ch.s.length)];
+ const T=t=>t.replaceAll('{t}',ch.t).replaceAll('{s}',s);
+ let h='';
+ if(local===0)h+=`<div class="bab">BAB ${ci+1}</div><h1>${ch.t}</h1>`;
+ else h+=`<div class="runhead">${b.title} — Bab ${ci+1}: ${ch.t}</div><h2>${ch.t}</h2>`;
+ h+=`<p>${T(pick(P.open))} ${T(pick(P.el))} ${T(pick(P.el))}</p>`;
+ if(r()<.85)h+=`<p>${T(pick(P.el))} ${T(pick(P.el))}</p>`;
+ h+=`<div class="poin"><div class="poin-t">📌 Poin Penting</div><ul>${[0,1,2].map(()=>`<li>${T(pick(P.bullets))}</li>`).join('')}</ul></div>`;
+ if(n%3===0){const sn=b.snips[Math.floor(r()*b.snips.length)];h+=`<div class="code-t">Contoh kode ${b.lang}:</div><pre class="code">${esc(sn)}</pre>`;}
+ if(n%5===0)h+=`<div class="tip">${pick(P.tips)}</div>`;
+ if(n%8===0)h+=`<div class="lat">✏️ <b>Latihan ${n}:</b> Buatlah program kecil yang menerapkan konsep <b>${s}</b>, lalu uji hasilnya di komputer Anda. Catat kendala yang muncul.</div>`;
+ h+=`<p>${T(pick(P.close))}</p><div class="folio">— ${n} —</div>`;
+ return h;}
+
+/* ================= NAVIGASI READER ================= */
+let cur=null,curPage=1,fontSz=16,tocPs=[];
+function openBook(i){
+ cur=allBooks()[i];
+ $('#rTitle').textContent=cur.title;
+ $('#totPg').textContent='/ '+cur.pages+' halaman';
+ $('#slider').max=cur.pages;$('#pgInput').max=cur.pages;
+ $('#paper').style.setProperty('--ac',cur.theme);
+ const rows=[['📕 Sampul',1],['📝 Kata Pengantar',2],['📑 Daftar Isi',3],['🧭 Panduan Membaca',4]];
+ cur.chapters.forEach((c,ix)=>rows.push([`Bab ${ix+1}: ${c.t}`,c.start]));
+ rows.push(['🏁 Penutup',cur.pages]);
+ tocPs=rows.map(r=>r[1]);
+ $('#rside').innerHTML='<h4>DAFTAR ISI</h4>'+rows.map(([t,p])=>`<div class="toc-i" onclick="goTo(${p});this.parentNode.classList.remove('open')"><span>${t}</span><span class="pg">${p}</span></div>`).join('');
+ goTo(+localStorage.getItem('bd711_'+cur.id)||1);
+ $('#reader').classList.add('show');document.body.style.overflow='hidden';}
+function closeBook(){saveCur();$('#reader').classList.remove('show');document.body.style.overflow='';refreshBadges();}
+function saveCur(){if(cur)localStorage.setItem('bd711_'+cur.id,curPage);}
+function goTo(n){
+ if(!cur)return;
+ curPage=Math.min(Math.max(1,n),cur.pages);
+ $('#paper').innerHTML=pageHTML(cur,curPage);
+ $('#pgInput').value=curPage;$('#slider').value=curPage;
+ const ci=chapterOf(cur,curPage);
+ const lab=curPage===1?'Sampul':curPage===2?'Kata Pengantar':curPage===3?'Daftar Isi':curPage===4?'Panduan Membaca':curPage===cur.pages?'Penutup':'Bab '+(ci+1)+' — '+cur.chapters[ci].t;
+ $('#rChap').textContent=lab;
+ const pct=Math.round(curPage/cur.pages*100);
+ $('#rPct').textContent=pct+'% dibaca';$('#bar').style.width=pct+'%';
+ let best=0;tocPs.forEach((p,i)=>{if(p<=curPage)best=i;});
+ document.querySelectorAll('.toc-i').forEach((el,i)=>el.classList.toggle('on',i===best));
+ $('#rmain').scrollTop=0;saveCur();}
+function fSz(d){fontSz=Math.min(22,Math.max(13,fontSz+d));$('#paper').style.fontSize=fontSz+'px';}
+function refreshBadges(){allBooks().forEach((b,i)=>{const v=+localStorage.getItem('bd711_'+b.id)||0;const el=document.getElementById('res'+i);if(el){if(v>1){el.textContent='⏯ Lanjut: hlm. '+v;el.classList.add('on');}else el.classList.remove('on');}});}
+function updateStats(){const ab=allBooks();
+ $('#stB').textContent='📕 '+ab.length+' Buku';
+ $('#stP').textContent='📄 '+ab.reduce((s,b)=>s+b.pages,0).toLocaleString('id-ID')+' Halaman';
+ $('#stC').textContent='📑 '+ab.reduce((s,b)=>s+b.chapters.length,0)+' Bab';}
+
+/* ================= INISIALISASI ================= */
+loadCustoms();renderCustoms();refreshBadges();updateStats();
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape'){if($('#addOv').classList.contains('show'))closeAdd();else if($('#reader').classList.contains('show'))closeBook();return;}
+ if(!$('#reader').classList.contains('show'))return;
+ if(e.key==='ArrowRight')goTo(curPage+1);
+ if(e.key==='ArrowLeft')goTo(curPage-1);});
+</script>
+</body>
+</html>
